@@ -55,11 +55,29 @@ type IngressStatsProcessed struct {
 	BySourceIPv4Addr map[string]PacketStats
 	BySourceIPv6Addr map[string]PacketStats
 	AggrStats        PacketStats
+	limiter          limiter
+}
+
+func newIngressStatsProcessed(topIPsToTrack int) IngressStatsProcessed {
+	return IngressStatsProcessed{
+		BySourceIPv4Addr: make(map[string]PacketStats),
+		BySourceIPv6Addr: make(map[string]PacketStats),
+		limiter: limiter{
+			numberOfIPsToTrack: topIPsToTrack,
+			topIPsByBytes:      make(map[string]uint64),
+		},
+	}
 }
 
 func (sp *IngressStatsProcessed) Ingest(ip net.IP, p PacketStats) {
+
 	sp.AggrStats.Bytes += p.Bytes
 	sp.AggrStats.Packets += p.Packets
+
+	// no need to track IP Wise, if we are not going to display it
+	if !sp.limiter.shouldProceed(ip.String(), p.Bytes, p.Packets) {
+		return
+	}
 
 	if len(ip) == 4 {
 		sp.IPV4Stats.Bytes += p.Bytes

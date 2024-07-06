@@ -44,6 +44,8 @@ func RunDisplay(inputChan chan nwmbBPF.IngressStatsProcessed,
 		if err != nil {
 			log.Fatalf("Error running TUI: %v", err)
 		}
+	} else {
+		log.Fatalf("Unknown display mode %s", mode)
 	}
 
 	log.Infof("TUI stopped!")

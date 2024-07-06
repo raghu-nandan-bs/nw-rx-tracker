@@ -73,7 +73,7 @@ func TrackIngress(interval time.Duration, stopChan chan bool) chan IngressStatsP
 
 	process := func() {
 
-		var collected IngressStatsProcessed
+		var collected = newIngressStatsProcessed(3)
 
 		IngestIPV4Objects(&collected)
 		IngestIPV6Objects(&collected)
