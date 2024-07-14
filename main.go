@@ -17,12 +17,13 @@ func main() {
 	if err != nil {
 		fmt.Errorf("unable to open log file: %v", err)
 	}
-	log.SetLevel(log.DebugLevel)
+	log.SetLevel(log.InfoLevel)
 	log.SetFormatter(
 		&log.TextFormatter{
-			FullTimestamp: true,
+			TimestampFormat: "2006-01-02 15:04:05.000",
 		},
 	)
+	log.SetReportCaller(true)
 	log.SetOutput(f)
 
 	// Remove resource limits for kernels <5.11.

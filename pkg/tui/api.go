@@ -44,6 +44,28 @@ func RunDisplay(inputChan chan nwmbBPF.IngressStatsProcessed,
 		if err != nil {
 			log.Fatalf("Error running TUI: %v", err)
 		}
+	} else if mode == "byip" {
+		outputSubscriber := make(chan *ringBufferByIP)
+		log.Tracef("Running TUI with aggregation by IP")
+		go consumeByIP(
+			outputSubscriber,
+			uint64(numberOfItems),
+			inputChan,
+			ctx,
+		)
+		log.Tracef("Started consumer process for IP wise aggregation")
+		err := RunTUIWithAggregationByIP(
+			outputSubscriber,
+			ctx,
+			cancelFunc,
+			refreshInterval,
+		)
+
+		if err != nil {
+			log.Fatalf("Error running TUI: %v", err)
+		}
+
+		//displayAggregatesByIPAsPlainText(outputSubscriber, ctx, cancelFunc)
 	} else {
 		log.Fatalf("Unknown display mode %s", mode)
 	}

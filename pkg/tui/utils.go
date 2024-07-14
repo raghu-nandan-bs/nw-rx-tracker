@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mum4k/termdash/cell"
 	nwmbBPF "github.com/raghu-nandan-bs/nw-rx-tracker/pkg/bpf"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,19 +16,18 @@ type item struct {
 	time    time.Time
 }
 
-type itemsByIP struct {
-	ip    string
-	rb    ringBuffer
-	color string
-}
-
 // inspired from https://github.com/surki/network-microburst/blob/main/chart.go#L260C1-L292C2
 
 type ringBuffer struct {
-	pos   int
-	items []item
-	cap   int
-	mode  string
+	pos                  int
+	items                []item
+	lastUpdatedIteration uint64
+	cap                  int
+	color                cell.Color
+	expiry               uint64
+	mode                 string
+	totalBytes           uint64
+	totalPackets         uint64
 }
 
 func newRingBuffer(size int) *ringBuffer {
@@ -36,7 +36,7 @@ func newRingBuffer(size int) *ringBuffer {
 	}
 
 	return &ringBuffer{
-		items: make([]item, 0, size),
+		items: make([]item, size, size),
 		cap:   size,
 	}
 }
@@ -55,6 +55,7 @@ func (r *ringBuffer) Len() int {
 }
 
 func (r *ringBuffer) Items() []item {
+	log.Tracef("ring buffer items: %v", r.items)
 	return append(r.items[r.pos:], r.items[:r.pos]...)
 }
 
