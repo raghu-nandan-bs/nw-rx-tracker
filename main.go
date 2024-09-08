@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 
+	// _ "github.com/cilium/ebpf/cmd/bpf2go"
 	nwmbBPF "github.com/raghu-nandan-bs/nw-rx-tracker/pkg/bpf"
 	"github.com/raghu-nandan-bs/nw-rx-tracker/pkg/tui"
 	log "github.com/sirupsen/logrus"
@@ -13,18 +14,17 @@ import (
 
 func main() {
 	// manage logging
-	f, err := os.OpenFile("nw-rx-tracker.log", os.O_WRONLY|os.O_CREATE, 0755)
+	f, err := os.OpenFile(logFile, os.O_WRONLY|os.O_CREATE, 0755)
 	if err != nil {
 		fmt.Errorf("unable to open log file: %v", err)
 	}
-	log.SetLevel(log.InfoLevel)
+	log.SetOutput(f)
 	log.SetFormatter(
 		&log.TextFormatter{
 			TimestampFormat: "2006-01-02 15:04:05.000",
 		},
 	)
 	log.SetReportCaller(true)
-	log.SetOutput(f)
 
 	// Remove resource limits for kernels <5.11.
 	if err := nwmbBPF.RemoveMemolock(); err != nil {
@@ -64,6 +64,8 @@ func main() {
 		displayMode,
 		interval, /*refresh interval*/
 		window,   /*width of the TUI time series*/
+		savePath, /*path to save the chart*/
 	)
+	log.Infof("Exiting")
 
 }

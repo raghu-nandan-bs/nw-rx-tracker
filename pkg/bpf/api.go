@@ -146,6 +146,10 @@ func IngestIPV4Objects(collector *IngressStatsProcessed) {
 	}
 }
 
+func uint128ToIPv6(addr [16]byte) net.IP {
+	return net.IP(addr[:])
+}
+
 func IngestIPV6Objects(collector *IngressStatsProcessed) {
 	// we cant make updates to the map while iterating
 	// so we clone the map, and iterate over the clone
@@ -160,9 +164,11 @@ func IngestIPV6Objects(collector *IngressStatsProcessed) {
 		if !iter.Next(&nextKey, &values) {
 			break
 		}
+		// Convert the nextKey (which should be 16 bytes) to net.IP
+		ip := uint128ToIPv6(*(*[16]byte)(nextKey))
 		// get the latest value, and clear the item in original map
 		bpfObjects.FlowTrackrIpv6.LookupAndDelete(&nextKey, &values)
 		// @TODO: prallelize this with schedulable runners
-		injestObject(nextKey, values, collector)
+		injestObject(ip, values, collector)
 	}
 }

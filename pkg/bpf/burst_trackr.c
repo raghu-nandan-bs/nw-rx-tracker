@@ -1,4 +1,3 @@
-
 //go:build ignore
 
 #include <linux/bpf.h>
@@ -53,7 +52,7 @@ __always_inline  __u32 get_ipv4_addr(void* data_begin, void*data_end ) {
     return 0;
 }
 
- __always_inline __uint128_t  get_ipv6_addr(void* data_begin, void*data_end ) {
+ __always_inline __uint128_t get_ipv6_addr(void* data_begin, void* data_end) {
     struct ethhdr *eth = data_begin;
     __u64 eth_offset = sizeof(*eth);
 
@@ -71,7 +70,12 @@ __always_inline  __u32 get_ipv4_addr(void* data_begin, void*data_end ) {
             return 0;
         }
 
-        return (__uint128_t)(ip6h->saddr.s6_addr);
+        __uint128_t addr = 0;
+        for (int i = 0; i < 16; i++) {
+            addr = (addr << 8) | ip6h->saddr.s6_addr[i];
+        }
+
+        return addr;
     } 
     return 0;
 }

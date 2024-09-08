@@ -21,7 +21,6 @@
 go.work
 go.work.sum
 
-nw-rx-tracker
 
 *.log
 
