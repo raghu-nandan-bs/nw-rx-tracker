@@ -32,7 +32,7 @@ sudo ./nw-rx-tracker [flags]
 
 `sudo ./release/nw-rx-tracker --device enp0s31f6 --display tui --interval 100ms`
 
-![TUI mode](./docs/tui.png)
+![TUI mode](./assets/tui.gif)
 
 ### Text mode 
 
