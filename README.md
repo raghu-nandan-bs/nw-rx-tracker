@@ -7,6 +7,7 @@ Network RX Tracker is a tool for monitoring network ingress statistics using eBP
 ## Features
 
 - Real-time monitoring of network ingress statistics
+  -  can capture ingress statistics by source IP address
 - Multiple display modes: text, TUI (Terminal User Interface), and aggregate
 - Configurable refresh interval and time window
 - Logging support
