@@ -2,6 +2,8 @@
 
 Network RX Tracker is a tool for monitoring network ingress statistics using eBPF. It provides real-time insights into network traffic on a specified network interface.
 
+### This project is inspired from [network-microburst](https://github.com/surki/network-microburst)
+
 ## Features
 
 - Real-time monitoring of network ingress statistics
@@ -104,17 +106,17 @@ open /tmp/nwrxtrkr.html
 
 1. Monitor wlan0 with default settings:
    ```
-   sudo ./nw-rx-tracker -device wlan0
+   sudo ./nw-rx-tracker --device wlan0
    ```
 
 2. Monitor eth0 with a 5-second refresh interval and TUI display:
    ```
-   sudo ./nw-rx-tracker -device eth0 -interval 5s -display tui
+   sudo ./nw-rx-tracker --device eth0 --interval 5s --display tui
    ```
 
 3. Monitor eth1 with a 1-minute window and save the chart:
    ```
-   sudo ./nw-rx-tracker -device eth1 -window 1m -save ~/network_chart.html
+   sudo ./nw-rx-tracker --device eth1 --window 1m --save ~/network_chart.html
    ```
 
 ## Logging
