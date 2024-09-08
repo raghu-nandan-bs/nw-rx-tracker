@@ -28,6 +28,19 @@ Run the Network RX Tracker with the following command:
 sudo ./nw-rx-tracker [flags]
 ```
 
+### Flags
+
+- `--device`: Network device name (default: "eth0")
+- `--interval`: Interval for refreshing stats (default: "1s")
+- `--window`: Width of the TUI time series (default: "30s")
+- `--display`: Display mode (options: text, tui, aggregate) (default: "plain")
+- `--log`: Log file path (default: "/tmp/nwrxtrkr.log")
+- `--log-level`: Log level (options: trace, debug, info, warn, error, fatal, panic) (default: "info")
+- `--save`: Path to save the chart (default: "/tmp/nwrxtrkr.html")
+
+### Examples
+
+
 ### TUI mode
 
 `sudo ./release/nw-rx-tracker --device enp0s31f6 --display tui --interval 100ms`
@@ -81,18 +94,13 @@ Inbound IPv6 Traffic:
   400::4100:2028:816:2:524                 Bytes: 26 kB       Packets: 297
 ```
 
+### View saved chart
 
-### Flags
-
-- `--device`: Network device name (default: "eth0")
-- `--interval`: Interval for refreshing stats (default: "1s")
-- `--window`: Width of the TUI time series (default: "30s")
-- `--display`: Display mode (options: text, tui, aggregate) (default: "plain")
-- `--log`: Log file path (default: "/tmp/nwrxtrkr.log")
-- `--log-level`: Log level (options: trace, debug, info, warn, error, fatal, panic) (default: "info")
-- `--save`: Path to save the chart (default: "/tmp/nwrxtrkr.html")
-
-### Examples
+open the saved chart in browser
+```
+open /tmp/nwrxtrkr.html
+```
+![saved chart](./assets/saved_chart.gif)
 
 1. Monitor wlan0 with default settings:
    ```
